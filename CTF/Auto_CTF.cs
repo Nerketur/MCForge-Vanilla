@@ -27,11 +27,11 @@ namespace MCForge
     }
     public class Base
     {
-        public int x;
-        public int y;
-        public int z;
+        public ushort x;
+        public ushort y;
+        public ushort z;
         public byte block;
-        public Base(int x, int y, int z, Team team)
+        public Base(ushort x, ushort y, ushort z, Team team)
         {
             this.x = x; this.y = y; this.z = z;
         }
@@ -61,39 +61,41 @@ namespace MCForge
                 switch (l.Split('=')[0])
                 {
                     case "base.red.x":
-                        redbase.x = int.Parse(l.Split('=')[1]);
+                        redbase.x = ushort.Parse(l.Split('=')[1]);
                         break;
                     case "base.red.y":
-                        redbase.y = int.Parse(l.Split('=')[1]);
+                        redbase.y = ushort.Parse(l.Split('=')[1]);
                         break;
                     case "base.red.z":
-                        redbase.z = int.Parse(l.Split('=')[1]);
+                        redbase.z = ushort.Parse(l.Split('=')[1]);
                         break;
                     case "base.red.block":
                         redbase.block = Block.Byte(l.Split('=')[1]);
                         break;
                     case "base.blue.x":
-                        bluebase.x = int.Parse(l.Split('=')[1]);
+                        bluebase.x = ushort.Parse(l.Split('=')[1]);
                         break;
                     case "base.blue.y":
-                        bluebase.y = int.Parse(l.Split('=')[1]);
+                        bluebase.y = ushort.Parse(l.Split('=')[1]);
                         break;
                     case "base.blue.z":
-                        bluebase.z = int.Parse(l.Split('=')[1]);
+                        bluebase.z = ushort.Parse(l.Split('=')[1]);
                         break;
                     case "base.blue.block":
                         bluebase.block = Block.Byte(l.Split('=')[1]);
                         break;
                     case "map.line.x":
-                        xline = int.Parse(l.Split('=')[1]);
+                        xline = ushort.Parse(l.Split('=')[1]);
                         break;
                     case "map.line.z":
-                        zline = int.Parse(l.Split('=')[1]);
+                        zline = ushort.Parse(l.Split('=')[1]);
                         break;
                 }
             }
+            Command.all.Find("unload").Use(null, "ctf");
             File.Copy("CTF/maps/" + mapname + ".lvl", "levels/ctf.lvl");
             Command.all.Find("load").Use(null, "ctf");
+            mainlevel = Level.Find("ctf");
         }
         public Auto_CTF()
         {
@@ -122,7 +124,16 @@ namespace MCForge
 
         void Player_PlayerBlockChange(Player p, ushort x, ushort y, ushort z, byte type)
         {
-            throw new NotImplementedException();
+            if (p.level == mainlevel && !blueteam.members.Contains(p) && !redteam.members.Contains(p))
+            {
+                p.SendBlockchange(x, y, z, p.level.GetTile(x, y, z));
+                Player.SendMessage(p, "You are not on a team!");
+                Plugins.Plugin.CancelEvent(Plugins.Events.BlockChange, p);
+            }
+            if (p.level == mainlevel && blueteam.members.Contains(p) && x == redbase.x && y == redbase.y && z == redbase.z && mainlevel.GetTile(redbase.x, redbase.y, redbase.z) != Block.air)
+            {
+
+            }
         }
         void Player_PlayerCommand(string cmd, Player p, string message)
         {
@@ -168,12 +179,32 @@ namespace MCForge
         }
         void Player_PlayerChat(Player p, string message)
         {
-            throw new NotImplementedException();
+            if (p.level == mainlevel)
+            {
+                if (blueteam.members.Contains(p))
+                {
+                    message = "<" + blueteam.color + "BLUE> " + message;
+                    Player.GlobalMessageLevel(mainlevel, message);
+                    Plugins.Plugin.CancelEvent(Plugins.Events.PlayerChat, p);
+                }
+                else if (redteam.members.Contains(p))
+                {
+                    message = "<" + redteam.color + "RED> " + message;
+                    Player.GlobalMessageLevel(mainlevel, message);
+                    Plugins.Plugin.CancelEvent(Plugins.Events.PlayerChat, p);
+                }
+                else
+                {
+                    message = "<SPEC> " + message;
+                    Player.GlobalMessageLevel(mainlevel, message);
+                    Plugins.Plugin.CancelEvent(Plugins.Events.PlayerChat, p);
+                }
+            }
         }
 
         void Player_PlayerDeath(Player p, byte deathblock)
         {
-            throw new NotImplementedException();
+
         }
 
         void Player_PlayerMove(Player p, ushort x, ushort y, ushort z)
