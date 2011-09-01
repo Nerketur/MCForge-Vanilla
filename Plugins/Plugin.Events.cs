@@ -43,10 +43,6 @@ namespace MCForge.Plugins
                     return p.cancelcommand;
                 case Events.PlayerMove:
                     return p.cancelmove;
-                case Events.LevelLoad:
-                    return Level.cancelload;
-                case Events.LevelSave:
-                    return Level.cancelsave;
                 default:
                     return false;
             }
@@ -72,12 +68,6 @@ namespace MCForge.Plugins
                     break;
                 case Events.PlayerMove:
                     p.cancelmove = true;
-                    break;
-                case Events.LevelLoad:
-                    Level.cancelsave = true;
-                    break;
-                case Events.LevelSave:
-                    Level.cancelload = true;
                     break;
             }
         }
