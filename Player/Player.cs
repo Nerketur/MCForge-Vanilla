@@ -1619,38 +1619,6 @@ namespace MCForge
                     {
                         HandleMsgBlock(this, x, (ushort)((int)y - 1), z, b1);
                     }
-                    else if (b1 == Block.flagbase)
-                    {
-                        if (team != null)
-                        {
-                            y = (ushort)(y - 1);
-                            foreach (Team workTeam in level.ctfgame.teams)
-                            {
-                                if (workTeam.flagLocation[0] == x && workTeam.flagLocation[1] == y && workTeam.flagLocation[2] == z)
-                                {
-                                    if (workTeam == team)
-                                    {
-                                        if (!workTeam.flagishome)
-                                        {
-                                            //       level.ctfgame.ReturnFlag(this, workTeam, true);
-                                        }
-                                        else
-                                        {
-                                            if (carryingFlag)
-                                            {
-                                                level.ctfgame.CaptureFlag(this, workTeam, hasflag);
-                                            }
-                                        }
-                                    }
-                                    else
-                                    {
-                                        level.ctfgame.GrabFlag(this, workTeam);
-                                    }
-                                }
-
-                            }
-                        }
-                    }
                 }
             }
             if (Block.Death(b)) HandleDeath(b); else if (Block.Death(b1)) HandleDeath(b1);
@@ -1701,16 +1669,7 @@ namespace MCForge
                             GlobalChatLevel(this, this.color + this.prefix + this.name + Server.DefaultColor + customMessage, false);
                             break;
                     }
-                    if (team != null && this.level.ctfmode)
-                    {
-                        if (carryingFlag)
-                        {
-                            level.ctfgame.DropFlag(this, hasflag);
-                        }
-                        team.SpawnPlayer(this);
-                        this.health = 100;
-                    }
-                    else if (CountdownGame.playersleftlist.Contains(this))
+                    if (CountdownGame.playersleftlist.Contains(this))
                     {
                         CountdownGame.Death(this);
                         Command.all.Find("spawn").Use(this, "");
@@ -1963,20 +1922,6 @@ namespace MCForge
                         SendMessage("To Admins &f-" + color + name + "&f- " + newtext);
                     Server.s.AdminLog("(Admins): " + name + ": " + newtext);
                     //IRCBot.Say(name + ": " + newtext, true);
-                    return;
-                }
-
-                if (this.teamchat)
-                {
-                    if (team == null)
-                    {
-                        Player.SendMessage(this, "You are not on a team.");
-                        return;
-                    }
-                    foreach (Player p in team.players)
-                    {
-                        Player.SendMessage(p, "(" + team.teamstring + ") " + this.color + this.name + ":&f " + text);
-                    }
                     return;
                 }
                 if (this.joker)
@@ -3428,11 +3373,6 @@ namespace MCForge
                 {
                     isFlying = false;
                     aiming = false;
-
-                    if (team != null)
-                    {
-                        team.RemoveMember(this);
-                    }
 
                     if (CountdownGame.players.Contains(this))
                     {

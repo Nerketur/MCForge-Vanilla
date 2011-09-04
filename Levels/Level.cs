@@ -136,9 +136,6 @@ namespace MCForge
 
         Dictionary<int, sbyte> leaves = new Dictionary<int, sbyte>(); // Holds block state for leaf decay
         Dictionary<int, bool[]> liquids = new Dictionary<int, bool[]>(); // Holds random flow data for liqiud physics
-
-        //CTF STUFF
-        public CTFGame ctfgame = new CTFGame();
         public bool ctfmode = false;
 
         public int lastCheck = 0;
@@ -950,7 +947,6 @@ namespace MCForge
 						catch { }
 
 						Server.s.Log("Level \"" + level.name + "\" loaded.");
-						level.ctfgame.mapOn = level;
 						return level;
 					}
                 }
