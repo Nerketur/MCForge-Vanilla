@@ -143,8 +143,25 @@ namespace MCForge
             }
             if (p.level == mainlevel && blueteam.members.Contains(p) && x == redbase.x && y == redbase.y && z == redbase.z && mainlevel.GetTile(redbase.x, redbase.y, redbase.z) != Block.air)
             {
-                Player.GlobalMessage(blueteam.color + p.name + " took the " + redteam.color + " red team FLAG!");
+                Player.GlobalMessage(blueteam.color + p.name + " took the " + redteam.color + " red team's FLAG!");
                 GetPlayer(p).hasflag = true;
+            }
+            if (p.level == mainlevel && redteam.members.Contains(p) && x == bluebase.x && y == bluebase.y && z == bluebase.z && mainlevel.GetTile(bluebase.x, bluebase.y, bluebase.z) != Block.air)
+            {
+                Player.GlobalMessage(redteam.color + p.name + " took the " + blueteam.color + " blue team's FLAG");
+                GetPlayer(p).hasflag = true;
+            }
+            if (p.level == mainlevel && blueteam.members.Contains(p) && x == bluebase.x && y == bluebase.y && z == bluebase.z && mainlevel.GetTile(bluebase.x, bluebase.y, bluebase.z) != Block.air)
+            {
+                Player.SendMessage(p, "You cant take your own flag!");
+                p.SendBlockchange(x, y, z, p.level.GetTile(x, y, z));
+                Plugins.Plugin.CancelEvent(Plugins.Events.BlockChange, p);
+            }
+            if (p.level == mainlevel && redteam.members.Contains(p) && x == redbase.x && y == redbase.y && z == redbase.z && mainlevel.GetTile(redbase.x, redbase.y, redbase.z) != Block.air)
+            {
+                Player.SendMessage(p, "You cant take your own flag!");
+                p.SendBlockchange(x, y, z, p.level.GetTile(x, y, z));
+                Plugins.Plugin.CancelEvent(Plugins.Events.BlockChange, p);
             }
         }
         public Data GetPlayer(Player p)
