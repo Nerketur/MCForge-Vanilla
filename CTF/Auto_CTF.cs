@@ -25,6 +25,16 @@ namespace MCForge
                 return false;
         }
     }
+    public class Data
+    {
+        public Player p;
+        public bool hasflag;
+        public bool blue;
+        public Data(bool team, Player p)
+        {
+            blue = team; this.p = p;
+        }
+    }
     public class Base
     {
         public ushort x;
@@ -51,6 +61,7 @@ namespace MCForge
         Base redbase;
         Level mainlevel;
         List<string> maps = new List<string>();
+        List<Data> cache = new List<Data>();
         string mapname = "";
         public void LoadMap(string map)
         {
@@ -132,8 +143,18 @@ namespace MCForge
             }
             if (p.level == mainlevel && blueteam.members.Contains(p) && x == redbase.x && y == redbase.y && z == redbase.z && mainlevel.GetTile(redbase.x, redbase.y, redbase.z) != Block.air)
             {
-
+                Player.GlobalMessage(blueteam.color + p.name + " took the " + redteam.color + " red team FLAG!");
+                GetPlayer(p).hasflag = true;
             }
+        }
+        public Data GetPlayer(Player p)
+        {
+            foreach (Data d in cache)
+            {
+                if (d.p == p)
+                    return d;
+            }
+            return null;
         }
         void Player_PlayerCommand(string cmd, Player p, string message)
         {
@@ -143,21 +164,25 @@ namespace MCForge
                 {
                     if (blueteam.members.Count > redteam.members.Count)
                     {
+                        cache.Add(new Data(false, p));
                         redteam.Add(p);
                         Player.GlobalMessageLevel(mainlevel, p.color + p.name + " " + c.Parse("red") + "joined the RED Team");
                     }
                     else if (redteam.members.Count > blueteam.members.Count)
                     {
+                        cache.Add(new Data(true, p));
                         blueteam.Add(p);
                         Player.GlobalMessageLevel(mainlevel, p.color + p.name + " " + c.Parse("blue") + "joined the BLUE Team");
                     }
                     else if (new Random().Next(2) == 0)
                     {
+                        cache.Add(new Data(false, p));
                         redteam.Add(p);
                         Player.GlobalMessageLevel(mainlevel, p.color + p.name + " " + c.Parse("red") + "joined the RED Team");
                     }
                     else
                     {
+                        cache.Add(new Data(true, p));
                         blueteam.Add(p);
                         Player.GlobalMessageLevel(mainlevel, p.color + p.name + " " + c.Parse("blue") + "joined the BLUE Team");
                     }
@@ -166,11 +191,13 @@ namespace MCForge
                 {
                     if (blueteam.members.Contains(p))
                     {
+                        cache.Remove(GetPlayer(p));
                         blueteam.members.Remove(p);
                         Player.GlobalMessageLevel(mainlevel, p.color + p.name + " " + blueteam.color + "left the ctf game");
                     }
                     else if (redteam.members.Contains(p))
                     {
+                        cache.Remove(GetPlayer(p));
                         redteam.members.Remove(p);
                         Player.GlobalMessageLevel(mainlevel, p.color + p.name + " " + redteam.color + "left the ctf game");
                     }
@@ -201,15 +228,66 @@ namespace MCForge
                 }
             }
         }
-
         void Player_PlayerDeath(Player p, byte deathblock)
         {
 
         }
-
         void Player_PlayerMove(Player p, ushort x, ushort y, ushort z)
         {
-            throw new NotImplementedException();
+            if (blueteam.members.Contains(p) && x < xline && z < zline)
+            {
+                foreach (Player p1 in redteam.members)
+                {
+                    if (Math.Abs(p1.pos[0] - x) < 2 && Math.Abs(p1.pos[1] - y) < 2 && Math.Abs(p1.pos[2] / 32 - z) < 2)
+                    {
+                        Player.SendMessage(p1, p.color + p.name + Server.DefaultColor + " tagged you!");
+                        Random rand = new Random();
+                        ushort xx = (ushort)(rand.Next(0, mainlevel.width));
+                        ushort yy = (ushort)(rand.Next(0, mainlevel.depth));
+                        ushort zz = (ushort)(rand.Next(0, mainlevel.height));
+                        while (mainlevel.GetTile(xx, yy, zz) != Block.air && xx < xline && zz < zline)
+                        {
+                            xx = (ushort)(rand.Next(0, mainlevel.width));
+                            yy = (ushort)(rand.Next(0, mainlevel.depth));
+                            zz = (ushort)(rand.Next(0, mainlevel.height));
+                        }
+                        p1.SendPos(0, xx, yy, zz, p1.rot[0], p1.rot[1]);
+                        if (GetPlayer(p1).hasflag)
+                        {
+                            Player.GlobalMessage(redteam.color + p.name + " DROPPED THE FLAG!");
+                            mainlevel.Blockchange(redbase.x, redbase.y, redbase.z, Block.red);
+                            GetPlayer(p).hasflag = false;
+                        }
+                    }
+                }
+            }
+            if (redteam.members.Contains(p) && x > xline && z > zline)
+            {
+                foreach (Player p1 in blueteam.members)
+                {
+                    if (Math.Abs(p1.pos[0] - x) < 2 && Math.Abs(p1.pos[1] - y) < 2 && Math.Abs(p1.pos[2] / 32 - z) < 2)
+                    {
+                        Player.SendMessage(p1, p.color + p.name + Server.DefaultColor + " tagged you!");
+                        Random rand = new Random();
+                        ushort xx = (ushort)(rand.Next(0, mainlevel.width));
+                        ushort yy = (ushort)(rand.Next(0, mainlevel.depth));
+                        ushort zz = (ushort)(rand.Next(0, mainlevel.height));
+                        while (mainlevel.GetTile(xx, yy, zz) != Block.air && xx < xline && zz < zline)
+                        {
+                            xx = (ushort)(rand.Next(0, mainlevel.width));
+                            yy = (ushort)(rand.Next(0, mainlevel.depth));
+                            zz = (ushort)(rand.Next(0, mainlevel.height));
+                        }
+                        p1.SendPos(0, xx, yy, zz, p1.rot[0], p1.rot[1]);
+                        if (GetPlayer(p1).hasflag)
+                        {
+                            Player.GlobalMessage(blueteam.color + p.name + " DROPPED THE FLAG!");
+                            mainlevel.Blockchange(bluebase.x, bluebase.y, bluebase.z, Block.blue);
+                            GetPlayer(p).hasflag = false;
+                        }
+                    }
+                }
+            }
         }
     }
 }
