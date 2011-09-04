@@ -1662,7 +1662,8 @@ namespace MCForge
                 case odoor10: return staircasestep;//odoor show by Stair
                 case odoor11: return lavastill;
                 case odoor12: return waterstill;
-
+                case snow: return white;
+                case fallsnow: return white;
                 case 130: return (byte)36;  //upVator
                 case 131: return (byte)34;  //upVator
                 case 132: return (byte)0;   //upVator
