@@ -269,7 +269,20 @@ namespace MCForge
         }
         void Player_PlayerDeath(Player p, byte deathblock)
         {
-
+            if (GetPlayer(p).hasflag)
+            {
+                if (redteam.members.Contains(p))
+                {
+                    Player.GlobalMessage(redteam.color + p.name + " DROPPED THE FLAG!");
+                    mainlevel.Blockchange(redbase.x, redbase.y, redbase.z, Block.red);
+                }
+                else if (blueteam.members.Contains(p))
+                {
+                    Player.GlobalMessage(blueteam.color + p.name + " DROPPED THE FLAG!");
+                    mainlevel.Blockchange(bluebase.x, bluebase.y, bluebase.z, Block.blue);
+                }
+                GetPlayer(p).hasflag = false;
+            }
         }
         void Player_PlayerMove(Player p, ushort x, ushort y, ushort z)
         {
