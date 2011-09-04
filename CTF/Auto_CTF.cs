@@ -30,6 +30,7 @@ namespace MCForge
         public Player p;
         public bool hasflag;
         public bool blue;
+        public bool chatting = false;
         public Data(bool team, Player p)
         {
             blue = team; this.p = p;
@@ -175,6 +176,24 @@ namespace MCForge
         }
         void Player_PlayerCommand(string cmd, Player p, string message)
         {
+            if (cmd == "teamchat" && p.level == mainlevel)
+            {
+                if (GetPlayer(p) != null)
+                {
+                    Data d = GetPlayer(p);
+                    if (d.chatting)
+                    {
+                        Player.SendMessage(d.p, "You are no longer chatting with your team!");
+                        d.chatting = !d.chatting;
+                    }
+                    else
+                    {
+                        Player.SendMessage(d.p, "You are now chatting with your team!");
+                        d.chatting = !d.chatting;
+                    }
+                    Plugins.Plugin.CancelEvent(Plugins.Events.PlayerCommand, p);
+                }
+            }
             if (cmd == "goto")
             {
                 if (message == "ctf" && p.level.name != "ctf")
@@ -225,23 +244,26 @@ namespace MCForge
         {
             if (p.level == mainlevel)
             {
-                if (blueteam.members.Contains(p))
+                if (GetPlayer(p).chatting)
                 {
-                    message = "<" + blueteam.color + "BLUE> " + message;
-                    Player.GlobalMessageLevel(mainlevel, message);
-                    Plugins.Plugin.CancelEvent(Plugins.Events.PlayerChat, p);
-                }
-                else if (redteam.members.Contains(p))
-                {
-                    message = "<" + redteam.color + "RED> " + message;
-                    Player.GlobalMessageLevel(mainlevel, message);
-                    Plugins.Plugin.CancelEvent(Plugins.Events.PlayerChat, p);
-                }
-                else
-                {
-                    message = "<SPEC> " + message;
-                    Player.GlobalMessageLevel(mainlevel, message);
-                    Plugins.Plugin.CancelEvent(Plugins.Events.PlayerChat, p);
+                    if (blueteam.members.Contains(p))
+                    {
+                        Player.players.ForEach(delegate(Player p1)
+                        {
+                            if (blueteam.members.Contains(p1))
+                                Player.SendMessage(p1, blueteam.color + "<Team-Chat>" + p.color + p.name + ": " + message);
+                        });
+                        Plugins.Plugin.CancelEvent(Plugins.Events.PlayerChat, p);
+                    }
+                    if (redteam.members.Contains(p))
+                    {
+                        Player.players.ForEach(delegate(Player p1)
+                        {
+                            if (redteam.members.Contains(p1))
+                                Player.SendMessage(p1, redteam.color + "<Team-Chat>" + p.color + p.name + ": " + message);
+                        });
+                        Plugins.Plugin.CancelEvent(Plugins.Events.PlayerChat, p);
+                    }
                 }
             }
         }
