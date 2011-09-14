@@ -227,7 +227,7 @@ namespace MCForge
                         Pump(beat);
                     }
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     if (Server.logbeat && beat.Log)
                     {

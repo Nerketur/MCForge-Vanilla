@@ -518,11 +518,11 @@ namespace MCForge
                 p.socket.BeginReceive(p.tempbuffer, 0, p.tempbuffer.Length, SocketFlags.None,
                                       new AsyncCallback(Receive), p);
             }
-            catch (SocketException e)
+            catch (SocketException)
             {
                 p.Disconnect();
             }
-            catch (ObjectDisposedException e)
+            catch (ObjectDisposedException)
             {
                 // Player is no longer connected, socket was closed
                 // Mark this as disconnected and remove them from active connection list
@@ -3618,7 +3618,7 @@ namespace MCForge
                     {
                         left.Add(this.name.ToLower(), this.ip);
                     }
-                    catch (Exception e)
+                    catch (Exception)
                     {
                         //Server.ErrorLog(e);
                     }

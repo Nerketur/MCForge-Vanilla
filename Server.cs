@@ -491,7 +491,7 @@ public static byte maxGuests = 10;
                 //    Server.s.Log("MySQL settings have not been set! Many features will not be available if MySQL is not enabled");
                 //  //  Server.ErrorLog(e);
                 //}
-                catch (Exception e)
+                catch (Exception)
                 {
                     Server.s.Log("MySQL settings have not been set! Please Setup using the properties window.");
   //         Server.ErrorLog(e);
@@ -911,7 +911,7 @@ processThread.Start();
                     listen.BeginAccept(new AsyncCallback(Accept), null);
                     begin = true;
                 }
-                catch (SocketException e)
+                catch (SocketException)
                 {
                     if (p != null)
                         p.Disconnect();
