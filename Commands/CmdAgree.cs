@@ -37,14 +37,13 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
+            if (p == null) {
+                Player.SendMessage(p, "This command can only be used in-game");
+                return;
+            }
             if (Server.agreetorulesonentry == false)
             {
                 Player.SendMessage(p, "This command can only be used if agree-to-rules-on-entry is enabled in the console!");
-                return;
-            }
-            if (p == null)
-            {
-                Player.SendMessage(p, "This command can only be used in-game");
                 return;
             }
             if (p.group.Permission > LevelPermission.Guest)
@@ -78,8 +77,8 @@ namespace MCForge
             string playerspath = "ranks/agreed.txt";
             if (File.Exists(playerspath))
             { 
-                //We don't want player "test" to have already agreed if "nate" and "stew" agrred.
-                // the preveious one, though, would put "natesteve" which also allows test
+                //We don't want player "test" to have already agreed if "nate" and "stew" agreed.
+                // the previous one, though, would put "natesteve" which also allows test
                 //There is a better way, namely regular expressions, but I'll worry about that later.
                 File.AppendAllText(playerspath, " " + p.name.ToLower());  //Ensures every name is seperated by a space.
             }

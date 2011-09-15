@@ -27,6 +27,10 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
+            if (p == null) {
+                Player.SendMessage(p, "Eh?  Just use the Chat tab!");
+                return;
+            }
             p.adminchat = !p.adminchat;
             if (p.adminchat) Player.SendMessage(p, "All messages will now be sent to Admins only");
             else Player.SendMessage(p, "Admin chat turned off");

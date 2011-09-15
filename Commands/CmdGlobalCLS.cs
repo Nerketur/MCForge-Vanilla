@@ -35,6 +35,7 @@ namespace MCForge
                 Player.GlobalMessage(".");
             }
             Player.GlobalMessage("%4Global Chat Cleared.");
+            Player.SendMessage(null, (p == null ? "Console" : p.name ) + " cleared the global chat!")
         }
 
         public override void Help(Player p)

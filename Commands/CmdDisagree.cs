@@ -38,6 +38,10 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
+            if (p == null) {
+                Player.SendMessage(p, "This command can only be used in-game");
+                return;
+            }
             if (Server.agreetorulesonentry == false)
             {
                 Player.SendMessage(p, "This command can only be used if agree-to-rules-on-entry is enabled in the console!");
@@ -46,11 +50,6 @@ namespace MCForge
             if (p.group.Permission > LevelPermission.Guest)
             {
                 Player.SendMessage(p, "Are you really that stupid to use this command?");
-                return;
-            }
-            if (p == null)
-            {
-                Player.SendMessage(p, "This command can only be used in-game");
                 return;
             }
             p.Kick("Consider agreeing next time =S");

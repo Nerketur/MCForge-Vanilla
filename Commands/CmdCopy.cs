@@ -34,6 +34,7 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
+            if (p == null) { Player.SendMessage(p, "This command is limited to in-game."); return; }
             if (message.Split(' ')[0].ToLower() == "save")
             {
                 if (message.Split(' ').Length != 2 || String.IsNullOrEmpty(message.Split(' ')[1])) { Help(p); return; }

@@ -47,28 +47,21 @@ namespace MCForge
 
 			}
 
-            Player who = null;
+            Player who = p;
             if (message != "")
             {
-                if (p.group.Permission <= LevelPermission.Guest)
+                if ( p != null || p.group.Permission <= LevelPermission.Guest)
                 { Player.SendMessage(p, "You cant send the FAQ to another player!"); return; }
                 who = Player.Find(message);
-            }
-            else
-            {
-                who = p;
+                if (who == null) {
+                    Player.SendMessage(p, "There is no player \"" + message + "\"!");
+                    return;
+                }
             }
 
-            if (who != null)
-            {
-                who.SendMessage("&cFAQ&f:");
-                foreach (string s in faq)
-                    who.SendMessage("&f" + s);
-            }
-            else
-            {
-                Player.SendMessage(p, "There is no player \"" + message + "\"!");
-            }
+            Player.SendMessage(p, "&cFAQ&f:");
+            foreach (string s in faq)
+                Player.SendMessage(p, "&f" + s);
         }
 
         public override void Help(Player p)

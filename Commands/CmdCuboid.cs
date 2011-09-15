@@ -33,6 +33,7 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
+            if (p == null) { Player.SendMessage(p, "This command is limited to in-game."); return; }
             int number = 0;
             string msg = String.Empty;
             try

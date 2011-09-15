@@ -32,6 +32,7 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
+            if (p == null) { Player.SendMessage(p, "This command can only be used in-game."); return; }
             Command CmdFly = Command.all.Find("fly");
             if (p.level.ctfmode)
             {

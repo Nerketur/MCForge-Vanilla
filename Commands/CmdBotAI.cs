@@ -31,12 +31,12 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if (message.Split(' ').Length < 2) { Help(p); return; }
             if (p == null)
             {
                 Player.SendMessage(p, "This command can only be used in-game");
                 return;
             }
+            if (message.Split(' ').Length < 2) { Help(p); return; }
             string foundPath = message.Split(' ')[1].ToLower();
 
             if (!Player.ValidName(foundPath)) { Player.SendMessage(p, "Invalid AI name!"); return; }

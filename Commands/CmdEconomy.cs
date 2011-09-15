@@ -16,6 +16,7 @@ namespace MCForge.Commands
         public override LevelPermission defaultRank { get { return LevelPermission.Banned; } }
         public override void Use(Player p, string message)
         {
+            if (p == null) { Player.SendMessage(p, "This command is limited to in-game."); return; }
             string[] command = message.ToLower().Trim().Split(' ');
             string par0 = String.Empty;
             string par1 = String.Empty;
@@ -594,7 +595,7 @@ namespace MCForge.Commands
             Player.SendMessage(p, "/eco buy <title/color/rank/map> [title/color/mappreset] [custommapname] - to buy");
             Player.SendMessage(p, "/eco stats [player] - view stats about yourself or [player]");
             Player.SendMessage(p, "/eco info <title/color/rank/map> - view information about buying");
-            if (p.group.Permission >= LevelPermission.Operator)
+            if (p == null || p.group.Permission >= LevelPermission.Operator)
             {
                 Player.SendMessage(p, "/eco setup - to setup economy");
                 Player.SendMessage(p, "/eco help [buy/stats/info/setup] - get more specific help");

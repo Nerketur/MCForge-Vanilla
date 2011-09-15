@@ -30,12 +30,10 @@ namespace MCForge
         public CmdAlive() { }
         public override void Use(Player p, string message)
         {
-            Player who = null;
-            if (message == "") { who = p; message = p.name; } else { who = Player.Find(message); }
             if (CmdZombieGame.players.Count == 0)
             {
                 Player.SendMessage(p, "No one is alive.");
-            }
+              }
             else
             {
                 Player.SendMessage(p, "Players who are " + c.green + "alive " + c.yellow + "are:");

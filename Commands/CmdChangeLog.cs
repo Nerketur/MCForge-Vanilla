@@ -58,7 +58,7 @@ namespace MCForge.Commands
 
                 if (split[0] == "all")
                 {
-                    if (p.group.Permission < LevelPermission.Operator)
+                    if (p != null || p.group.Permission < LevelPermission.Operator)
                     {
                         Player.SendMessage(p, "You must be at least " + LevelPermission.Operator + " to send the changelog to all players.");
                         return;

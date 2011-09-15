@@ -32,6 +32,7 @@ namespace MCForge
         public override LevelPermission defaultRank { get { return LevelPermission.Admin; } }
         public override void Use(Player p, string message)
         {
+            if (p == null) { Player.SendMessage(p, "This command is limited to in-game."); return; }
             int num = message.Split(' ').Length;
             if (num == 3)
             {

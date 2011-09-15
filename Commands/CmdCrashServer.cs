@@ -33,6 +33,7 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
+            if (p == null) { Player.SendMessage(p, "Really crash the server? (Y/N) _"); return; }
             if (message != "") { Help(p); return; }
             Player.GlobalMessageOps(p.color + Server.DefaultColor + " used &b/crashserver");
             p.Kick("Server crash! Error code 0x0005A4");

@@ -46,6 +46,8 @@ namespace MCForge
         block ppos;
 		public override void Use(Player p, string message)
 		{
+            if (p == null) { Player.SendMessage(p, "This command is limited to in-game."); return; }
+
             //first check if file exists
             if (File.Exists("extra/images/" + message + ".gif"))
             {

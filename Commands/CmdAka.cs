@@ -13,6 +13,11 @@ namespace MCForge
         public CmdAka() { }
         public override void Use(Player p, string message)
         {
+            if (p == null) {
+                Player.SendMessage(p, "This command can only be used in-game");
+                return;
+            }
+
             if (message == "") message = p.name;
 
             if (!p.aka)

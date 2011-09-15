@@ -32,6 +32,7 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
+            if (p == null) { Player.SendMessage(p, "This command is limited to in-game."); return; }
             byte b; Int64 seconds;
             Player who;
             Player.UndoPos Pos;

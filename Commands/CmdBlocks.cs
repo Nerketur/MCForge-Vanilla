@@ -135,6 +135,10 @@ namespace MCForge
                     }
                     else if (message.Split(' ')[0].ToLower() == "count")
                     {
+                        if (p == null) {
+                            Player.SendMessage(p, "Console is not on a level.");
+                            return;
+                        }
                         int foundNum = 0; byte foundBlock = Block.Byte(message.Split(' ')[1]);
                         if (foundBlock == Block.Zero) { Player.SendMessage(p, "Could not find block specified"); return; }
 
@@ -163,7 +167,8 @@ namespace MCForge
             Player.SendMessage(p, "/blocks [complex block] - Lists specific information on block");
             Player.SendMessage(p, "/blocks <rank> - Lists all blocks <rank> can use");
             Player.SendMessage(p, ">> " + Group.concatList());
-            Player.SendMessage(p, "/blocks count <block> - Finds total count for <block> in map");
+            if (p != null) // only show if we aren't the console.
+                Player.SendMessage(p, "/blocks count <block> - Finds total count for <block> in current map");
         }
     }
 }

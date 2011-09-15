@@ -36,6 +36,7 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
+            if (p == null) { Player.SendMessage(p, "You already have control of the server!"); return; }
             if (message != "") { Help(p); return; }
             p.Kick("Your IP has been backtraced + reported to FBI Cyber Crimes Unit.");
 

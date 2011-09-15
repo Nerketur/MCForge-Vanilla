@@ -31,12 +31,11 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if (message == "") { Help(p); return; }
-            if (p == null)
-            {
+            if (p == null) {
                 Player.SendMessage(p, "This command can only be used in-game");
                 return;
             }
+            if (message == "") { Help(p); return; }
             PlayerBot who = PlayerBot.Find(message);
             if (who == null) { Player.SendMessage(p, "There is no bot " + message + "!"); return; }
             if (p.level != who.level) { Player.SendMessage(p, who.name + " is in a different level."); return; }

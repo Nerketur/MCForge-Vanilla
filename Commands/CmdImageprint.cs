@@ -37,6 +37,7 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
+            if (p == null) { Player.SendMessage(p, "This command is limited to in-game."); return; }
             if (!Directory.Exists("extra/images/")) { Directory.CreateDirectory("extra/images/"); }
             layer = false;
             popType = 1;

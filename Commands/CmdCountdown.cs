@@ -19,12 +19,12 @@ namespace MCForge
         public CmdCountdown() { }
         public override void Use(Player p, string message)
         {
-            if (message == "") { Help(p); return; }
             if (p == null)
             {
                 Server.s.Log("'null' or console tried to use /countdown. This command is limited to ingame, sorry!!");
                 return;
             }
+            if (message == "") { Help(p); return; }
 
             string[] command = message.ToLower().Split(' ');
             string par0 = String.Empty;
@@ -503,26 +503,26 @@ namespace MCForge
         }
         public override void Help(Player p)
         {
-            p.SendMessage("/countdown join - join the game");
-            p.SendMessage("/countdown leave - leave the game");
-            p.SendMessage("/countdown goto - goto the countdown map");
-            p.SendMessage("/countdown players - view players currently playing");
-            p.SendMessage("/cd - Command shortcut.");
-            if (p.group.Permission < LevelPermission.Operator)
+            Player.SendMessage(p, "/countdown join - join the game");
+            Player.SendMessage(p, "/countdown leave - leave the game");
+            Player.SendMessage(p, "/countdown goto - goto the countdown map");
+            Player.SendMessage(p, "/countdown players - view players currently playing");
+            Player.SendMessage(p, "/cd - Command shortcut.");
+            if (p != null || p.group.Permission < LevelPermission.Operator)
             {
-                p.SendMessage("/countdown rules - the rules of countdown");
+                Player.SendMessage(p, "/countdown rules - the rules of countdown");
             }
             else
             {
-                p.SendMessage("The following commands are OP and above only!!");
-                p.SendMessage("/countdown rules <send> <all/map/player> - the rules of countdown. with send: all to send to all, map to send to map and have a players name to send to a player");
-                p.SendMessage("/countdown download - download the countdown map");
-                p.SendMessage("/countdown enable - enable the game");
-                p.SendMessage("/countdown disable - disable the game");
-                p.SendMessage("/countdown cancel - cancels a game");
-                p.SendMessage("/countdown start [speed] [mode] - start the game, speeds are 'slow', 'normal', 'fast', 'extreme' and 'ultimate', modes are 'normal' and 'freeze'");
-                p.SendMessage("/countdown reset [all/map] - reset the whole game (all) or only the map (map)");
-                p.SendMessage("/countdown tutorial - a tutorial on how to setup countdown");
+                Player.SendMessage(p, "The following commands are OP and above only!!");
+                Player.SendMessage(p, "/countdown rules <send> <all/map/player> - the rules of countdown. with send: all to send to all, map to send to map and have a players name to send to a player");
+                Player.SendMessage(p, "/countdown download - download the countdown map");
+                Player.SendMessage(p, "/countdown enable - enable the game");
+                Player.SendMessage(p, "/countdown disable - disable the game");
+                Player.SendMessage(p, "/countdown cancel - cancels a game");
+                Player.SendMessage(p, "/countdown start [speed] [mode] - start the game, speeds are 'slow', 'normal', 'fast', 'extreme' and 'ultimate', modes are 'normal' and 'freeze'");
+                Player.SendMessage(p, "/countdown reset [all/map] - reset the whole game (all) or only the map (map)");
+                Player.SendMessage(p, "/countdown tutorial - a tutorial on how to setup countdown");
             }
         }
     }

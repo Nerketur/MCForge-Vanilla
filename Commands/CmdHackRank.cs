@@ -46,18 +46,18 @@ namespace MCForge
         /// <param name="message">Message</param>
         public override void Use(Player p, string message)
         {
-            if (message == "")
-            {
-                Help(p);
-                return;
-            }
-			
 			if(p == null)
 			{
 				Player.SendMessage(p, "Console can't use hackrank, that doesn't make any sense!");
 				return;
 			}
 
+            if (message == "")
+            {
+                Help(p);
+                return;
+            }
+			
             string[] msg = message.Split(' ');
             if (Group.Exists(msg[0]))
             {
@@ -131,9 +131,9 @@ namespace MCForge
         /// <param name="p">Player</param>
         public override void Help(Player p)
         {
-            p.SendMessage("/hackrank [rank] - Hacks a rank");
-            p.SendMessage("Usable Ranks:");
-            p.SendMessage(Group.concatList(true, true, false));
+            Player.SendMessage(p, "/hackrank [rank] - Hacks a rank");
+            Player.SendMessage(p, "Usable Ranks:");
+            Player.SendMessage(p, Group.concatList(true, true, false));
         }
 
         private void killTimer(System.Timers.Timer time)

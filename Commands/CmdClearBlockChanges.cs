@@ -33,9 +33,9 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if (p == null)
+            if (p == null && message == "")
             {
-                Player.SendMessage(p, "This command can only be used in-game");
+                Player.SendMessage(p, "Console is not in a level.");
                 return;
             }
             Level l = Level.Find(message);
@@ -47,7 +47,7 @@ namespace MCForge
         }
         public override void Help(Player p)
         {
-            Player.SendMessage(p, "/clearblockchanges <map> - Clears the block changes stored in /about for <map>.");
+            Player.SendMessage(p, "/clearblockchanges [map] - Clears the block changes stored in /about for <map>.");
             Player.SendMessage(p, "&cUSE WITH CAUTION");
         }
     }

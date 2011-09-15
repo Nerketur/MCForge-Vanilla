@@ -62,7 +62,7 @@ namespace MCForge
             if (nextGroup != null)
                 Command.all.Find("setrank").Use(p, foundName + " " + nextGroup.name);
             else
-                Player.SendMessage(p, "No higher ranks exist");
+                Player.SendMessage(p, "No lower ranks exist");
         }
         public override void Help(Player p)
         {

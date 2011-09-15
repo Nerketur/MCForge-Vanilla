@@ -13,6 +13,7 @@ namespace MCForge
         public CmdDisInfect() { }
         public override void Use(Player p, string message)
         {
+            if (p == null) { Player.SendMessage(p, "This command is limited to in-game."); return; }
             Player who = null;
             if (message == "") { who = p; message = p.name; } else { who = Player.Find(message); }
             if (CmdZombieGame.players.Contains(who))

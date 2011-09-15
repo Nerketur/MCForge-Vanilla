@@ -44,7 +44,7 @@ namespace MCForge
             }
             catch { }
               
-            if (!p.group.CanExecute(Command.all.Find("newlvl")))
+            if (p != null || !p.group.CanExecute(Command.all.Find("newlvl")))
             {
                 Player.SendMessage(p, "You cannot use this command, unless you can use /newlvl!");
                 return;
@@ -81,7 +81,7 @@ namespace MCForge
         }
         public override void Help(Player p)
         {
-            Player.SendMessage(p, "/copylvl [Level] [Copied Level] - Makes a copy of [Level] called [Copied Level].");
+            Player.SendMessage(p, "/copylvl <Level> <Copied Level> - Makes a copy of <Level> called <Copied Level>.");
         }
     }
 }

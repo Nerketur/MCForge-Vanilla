@@ -342,10 +342,10 @@ namespace MCForge
             Player.SendMessage(p, "/chatroom [room] - gives you details about the room");
             Player.SendMessage(p, "/chatroom join [room] - joins a room");
             Player.SendMessage(p, "/chatroom leave [room] - leaves a room");
-            if (p.group.Permission >= LevelPermission.AdvBuilder)
+            if (p == null || p.group.Permission >= LevelPermission.AdvBuilder)
             {
                 Player.SendMessage(p, "/chatroom create [room] - creates a new room");
-                if (p.group.Permission < LevelPermission.Operator)
+                if (p == null || p.group.Permission < LevelPermission.Operator)
                 {
                     Player.SendMessage(p, "/chatroom delete [room] - deletes a room if all people have left");
                 }
@@ -354,7 +354,7 @@ namespace MCForge
                     Player.SendMessage(p, "/chatroom delete [room] - deletes a room");
                 }
             }
-            if (p.group.Permission >= LevelPermission.Operator)
+            if (p == null || p.group.Permission >= LevelPermission.Operator)
             {
 
                 Player.SendMessage(p, "/chatroom spy [room] - spy on a chatroom");
