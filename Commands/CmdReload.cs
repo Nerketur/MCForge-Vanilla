@@ -49,46 +49,41 @@ namespace MCForge
                     Player.SendMessage(p, "You cannot reload the main level!");
                     return;
                 }
-                if (p == null)
+                //if (p == null)
+                //{
+                //    Command.all.Find("unload").Use(p, message);
+                //    Command.all.Find("load").Use(p, message);
+                //    foreach (Player pl in Player.players)
+                //    {
+                //        if (pl.level.name.ToLower() == message.ToLower())
+                //        {
+                //            Command.all.Find("goto").Use(pl, message);
+                //        }
+                //    }
+                //    Player.GlobalMessage("&cThe map, " + message + " has been reloaded!");
+                //    //IRCBot.Say("The map, " + message + " has been reloaded.");
+                //    Server.IRC.Say("The map, " + message + ", has been reloaded.");
+                //    Server.s.Log("The map, " + message + ", was reloaded by the console");
+                //    return;
+                //}
+                //if (p != null)
+                //{
+                List<Player> movedPlayers = new List<Player>();
+                movedPlayers.AddRange(p.level.players);
+                if (p != null) p.ignorePermission = true;
+                Command.all.Find("unload").Use(p, message);
+                Command.all.Find("load").Use(p, message);
+                if (p != null) p.ignorePermission = false;
+                foreach (Player pl in movedPlayers)
                 {
-                    {
-                        foreach (Player pl in Player.players)
-                        {
-                            if (pl.level.name.ToLower() == message.ToLower())
-                            {
-                                Command.all.Find("unload").Use(p, message);
-                                Command.all.Find("load").Use(p, message);
-                                Command.all.Find("goto").Use(pl, message);
-                            }
-                        }
-                        Player.GlobalMessage("&cThe map, " + message + " has been reloaded!");
-                        //IRCBot.Say("The map, " + message + " has been reloaded.");
-                        Server.IRC.Say("The map, " + message + " has been reloaded.");
-                        Server.s.Log("The map, " + message + " was reloaded by the console");
-                        return;
-                    }
+                    Command.all.Find("goto").Use(pl, message);
                 }
-                if (p != null)
-                {
-                    {
-                        foreach (Player pl in Player.players)
-                        {
-                            if (pl.level.name.ToLower() == message.ToLower())
-                            {
-                                p.ignorePermission = true;
-                                Command.all.Find("unload").Use(p, message);
-                                Command.all.Find("load").Use(p, message);
-                                Command.all.Find("goto").Use(pl, message);
-                            }
-                        }
-                        Player.GlobalMessage("&cThe map, " + message + " has been reloaded!");
-						//IRCBot.Say("The map, " + message + " has been reloaded.");
-                        Server.IRC.Say("The map, " + message + " has been reloaded.");
-						Server.s.Log("The map, " + message + " was reloaded by " + p.name);
-						p.ignorePermission = false;
-						return;
-					}
-				}
+                Player.GlobalMessage("&cThe map, " + message + ", has been reloaded!");
+				//IRCBot.Say("The map, " + message + " has been reloaded.");
+                Server.IRC.Say("The map, " + message + ", has been reloaded.");
+                Server.s.Log("The map, " + message + ", was reloaded by " + ( p == null ? "the console" : p.name));
+				return;
+                //}
 			}
 		}
 	}

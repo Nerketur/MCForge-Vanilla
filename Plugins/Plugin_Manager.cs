@@ -74,31 +74,27 @@ namespace MCForge
 	    String creator = "";
             try
             {
-                object instance = Activator.CreateInstance(Assembly.LoadFrom(pluginname).GetTypes()[0]);
-                String plugin_version = ((Plugin)instance).MCForge_Version;
+                Plugin plugin = (Plugin)Activator.CreateInstance(Assembly.LoadFrom(pluginname).GetTypes()[0]);
+                String plugin_version = plugin.MCForge_Version;
                 if (plugin_version != "" && new Version(plugin_version) != Server.Version)
                 {
-                    Server.s.Log("This plugin (" + ((Plugin)instance).name + ") isnt compatible with this version of MCForge!");
+                    Server.s.Log("This plugin (" + plugin.name + ") isnt compatible with this version of MCForge!");
                     Thread.Sleep(1000);
                     if (Server.unsafe_plugin)
-                    {
                         Server.s.Log("Will attempt to load!");
-                        goto here;
-                    }
                     else
                         return;
                 }
-                here:
-                Plugin.all.Add((Plugin)instance);
-		        creator = ((Plugin)instance).creator;
-                if (((Plugin)instance).LoadAtStartup)
+                Plugin.all.Add(plugin);
+		        creator = plugin.creator;
+                if (plugin.LoadAtStartup)
                 {
-                    ((Plugin)instance).Load(startup);
-                    Server.s.Log("Plugin: " + ((Plugin)instance).name + " loaded...build: " + ((Plugin)instance).build);
+                    plugin.Load(startup);
+                    Server.s.Log("Plugin: " + plugin.name + " loaded...build: " + plugin.build);
                 }
                 else
-                    Server.s.Log("Plugin: " + ((Plugin)instance).name + " was not loaded, you can load it with /pload");
-                Server.s.Log(((Plugin)instance).welcome);
+                    Server.s.Log("Plugin: " + plugin.name + " was not loaded, you can load it with /pload");
+                Server.s.Log(plugin.welcome);
             }
             catch (FileNotFoundException e)
             {
@@ -133,7 +129,7 @@ namespace MCForge
         {
             p.Unload(shutdown);
             all.Remove(p);
-            Server.s.Log(p.name + " was unloaded...how ever you cant re-load it until you restart!");
+            Server.s.Log(p.name + " was unloaded.  You cant reload it until you restart.");
         }
         /// <summary>
         /// Unload all plugins
